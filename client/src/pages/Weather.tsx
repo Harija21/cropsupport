@@ -1,5 +1,5 @@
 import { useWeather } from "@/hooks/use-weather";
-import { Loader2, CloudSun, Wind, Droplets, Thermometer, MapPin } from "lucide-react";
+import { Loader2, CloudSun, Wind, Droplets, Thermometer, MapPin, Sprout, Sun } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Weather() {
@@ -109,5 +109,3 @@ export default function Weather() {
   );
 }
 
-// Needed imports that were missing above
-import { Sun } from "lucide-react";

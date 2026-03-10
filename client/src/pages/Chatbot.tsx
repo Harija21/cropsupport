@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useAiChat, useAiHistory } from "@/hooks/use-ai";
 import { format } from "date-fns";
-import { Send, Sprout, User, Loader2 } from "lucide-react";
+import { Send, Sprout, User, Loader2, MessageSquare } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Chatbot() {
@@ -119,5 +119,3 @@ export default function Chatbot() {
   );
 }
 
-// Ensure MessageSquare is imported for the empty state
-import { MessageSquare } from "lucide-react";
