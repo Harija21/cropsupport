@@ -1,0 +1,108 @@
+Act as a senior full-stack developer and AI engineer.
+Build a complete web application called **“AI-Based Farmer Query Support and Advisory System”** that helps farmers get AI-powered agricultural advice.
+
+Use the following technologies:
+
+Frontend:
+
+* React.js
+* Tailwind CSS
+* Axios
+* React Router
+
+Backend:
+
+* Node.js
+* Express.js
+* MongoDB with Mongoose
+
+AI Integration:
+
+* Google Gemini API for chatbot-based farming advice
+* Python TensorFlow CNN model for crop disease detection
+
+Other APIs:
+
+* OpenWeatherMap API for weather advisory
+
+The system should be production-ready and structured properly.
+
+Project Folder Structure:
+
+Root
+
+* frontend (React app)
+* backend (Node + Express API)
+* ai-services (Python AI models)
+* uploads (for crop images)
+* .env file
+
+Frontend Features:
+
+1. Home page introducing the system
+2. Farmer login and registration
+3. Dashboard
+4. AI Chatbot page where farmers can ask farming questions
+5. Crop disease detection page where farmers upload crop images
+6. Weather advisory page showing weather and farming suggestions
+7. Farmer community page where farmers can post queries
+8. Responsive design for mobile and desktop
+
+Backend Features:
+
+1. Authentication system using JWT
+2. REST APIs for:
+
+   * Farmer registration and login
+   * AI query submission
+   * Crop disease detection
+   * Weather advisory
+   * Community posts
+3. MongoDB models for:
+
+   * Farmer
+   * Query
+   * DiseaseReport
+   * CommunityPost
+
+AI Chatbot:
+
+* Integrate Google Gemini API
+* Farmers ask questions like “Why are my tomato leaves turning yellow?”
+* System returns detailed farming advice
+
+Crop Disease Detection:
+
+* Use TensorFlow CNN model
+* Accept crop image upload
+* Predict plant disease
+* Return treatment advice
+
+Weather Advisory:
+
+* Use OpenWeatherMap API
+* Based on farmer location
+* Provide farming suggestions like irrigation advice or rain alerts
+
+Backend should include:
+
+* Controllers
+* Routes
+* Models
+* Middleware
+* Services
+
+Frontend should include:
+
+* Components
+* Pages
+* API service files
+
+Add comments in code explaining functionality.
+
+Ensure the project can run with:
+
+npm install
+npm run dev
+
+Provide instructions for running the system inside Replit.
