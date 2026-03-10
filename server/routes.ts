@@ -6,6 +6,7 @@ import { z } from "zod";
 import jwt from "jsonwebtoken";
 import { GoogleGenAI, Modality } from "@google/genai";
 import multer from "multer";
+import fs from "fs";
 
 const JWT_SECRET = process.env.SESSION_SECRET || "fallback_secret";
 const upload = multer({ dest: "uploads/" });
@@ -146,7 +147,6 @@ export async function registerRoutes(
       }
 
       // Read image file as base64 for Gemini
-      const fs = require("fs");
       const imageBytes = fs.readFileSync(req.file.path);
       const base64Image = Buffer.from(imageBytes).toString("base64");
 
