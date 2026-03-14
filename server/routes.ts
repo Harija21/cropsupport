@@ -11,6 +11,33 @@ import fs from "fs";
 const JWT_SECRET = process.env.SESSION_SECRET || "fallback_secret";
 const upload = multer({ dest: "uploads/" });
 
+// Determine current season based on month and rough hemisphere detection
+function getSeason(location: string): string {
+  const month = new Date().getMonth() + 1; // 1-12
+  const southernHemisphereKeywords = [
+    "australia", "new zealand", "south africa", "brazil", "argentina",
+    "chile", "peru", "bolivia", "ecuador", "colombia", "zimbabwe",
+    "mozambique", "madagascar", "namibia", "botswana", "zambia"
+  ];
+  const isSouthern = southernHemisphereKeywords.some(k =>
+    location.toLowerCase().includes(k)
+  );
+  // Months are flipped for Southern Hemisphere
+  const adjusted = isSouthern ? ((month + 5) % 12) + 1 : month;
+  if (adjusted >= 3 && adjusted <= 5) return "Spring";
+  if (adjusted >= 6 && adjusted <= 8) return "Summer";
+  if (adjusted >= 9 && adjusted <= 11) return "Autumn/Fall";
+  return "Winter";
+}
+
+// Generate weather context for AI prompt (same logic as the weather endpoint)
+function getWeatherContext(location: string): { temp: number; condition: string } {
+  const isRainy = Math.random() > 0.7;
+  const temp = Math.floor(Math.random() * 20) + 15;
+  const condition = isRainy ? "Rainy" : temp > 28 ? "Sunny and hot" : "Mild and cloudy";
+  return { temp, condition };
+}
+
 // Setup Gemini AI for text & image based tasks
 const ai = new GoogleGenAI({
   apiKey: process.env.AI_INTEGRATIONS_GEMINI_API_KEY,
@@ -104,11 +131,40 @@ export async function registerRoutes(
   app.post(api.ai.chat.path, authMiddleware, async (req: any, res: any) => {
     try {
       const { question } = api.ai.chat.input.parse(req.body);
-      
+
+      // Fetch user profile to get their location for contextual advice
+      const user = await storage.getUser(req.userId);
+      const location = user?.location || "Unknown location";
+      const season = getSeason(location);
+      const weather = getWeatherContext(location);
+      const now = new Date();
+      const dateStr = now.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+      const monthName = now.toLocaleString("en-US", { month: "long" });
+
+      // Build a rich location-aware system prompt
+      const systemPrompt = `You are an expert agricultural advisor with deep knowledge of region-specific farming practices, local pests, crop calendars, and soil conditions.
+
+FARMER CONTEXT:
+- Location: ${location}
+- Current date: ${dateStr} (${monthName})
+- Current season at their location: ${season}
+- Current weather: ${weather.condition}, ${weather.temp}°C
+
+ADVISORY GUIDELINES:
+1. Always tailor your advice specifically to the farmer's location (${location}) — mention region-relevant crops, soil types, local practices, and government schemes if applicable.
+2. Factor in the current season (${season}) and weather (${weather.condition}, ${weather.temp}°C) — e.g., watering needs, planting timing, pest risks.
+3. Recommend crops, varieties, and techniques that thrive in the climate and soil of ${location}.
+4. Mention specific local pests, diseases, or weather hazards common to this region and the current season.
+5. Provide practical, actionable steps a farmer in ${location} can take right now.
+6. If timing is involved, account for the current season — what to plant, harvest, or prepare now.
+7. Keep answers concise but complete. Use bullet points for step-by-step guidance.
+
+Now answer the farmer's question with this full location and seasonal context:`;
+
       const response = await ai.models.generateContent({
         model: "gemini-2.5-flash",
         contents: [
-          { role: "user", parts: [{ text: `You are an expert agricultural advisor. Answer this farmer's question: ${question}` }] }
+          { role: "user", parts: [{ text: `${systemPrompt}\n\nFarmer's question: ${question}` }] }
         ],
       });
 
