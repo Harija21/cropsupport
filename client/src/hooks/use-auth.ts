@@ -66,6 +66,8 @@ export function useLogin() {
     },
     onSuccess: (data) => {
       localStorage.setItem("token", data.token);
+      // Record the exact moment this login session started — used to show fresh chat
+      localStorage.setItem("sessionStartTime", new Date().toISOString());
       queryClient.setQueryData(["/api/auth/me"], data.user);
     },
   });
@@ -88,6 +90,8 @@ export function useRegister() {
     },
     onSuccess: (data) => {
       localStorage.setItem("token", data.token);
+      // Record the exact moment this session started — used to show fresh chat
+      localStorage.setItem("sessionStartTime", new Date().toISOString());
       queryClient.setQueryData(["/api/auth/me"], data.user);
     },
   });
@@ -97,7 +101,13 @@ export function useLogout() {
   const queryClient = useQueryClient();
   return () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("sessionStartTime");
     queryClient.setQueryData(["/api/auth/me"], null);
     queryClient.clear();
   };
+}
+
+/** Returns the ISO timestamp from when the current login session started. */
+export function getSessionStartTime(): string | null {
+  return localStorage.getItem("sessionStartTime");
 }
