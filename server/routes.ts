@@ -142,24 +142,24 @@ export async function registerRoutes(
       const monthName = now.toLocaleString("en-US", { month: "long" });
 
       // Build a rich location-aware system prompt
-      const systemPrompt = `You are an expert agricultural advisor with deep knowledge of region-specific farming practices, local pests, crop calendars, and soil conditions.
+      const systemPrompt = `You are an expert agricultural advisor specializing in region-specific farming.
 
-FARMER CONTEXT:
-- Location: ${location}
-- Current date: ${dateStr} (${monthName})
-- Current season at their location: ${season}
-- Current weather: ${weather.condition}, ${weather.temp}°C
+## Farmer Context
+- **Location:** ${location}
+- **Date:** ${dateStr}
+- **Season:** ${season}
+- **Weather:** ${weather.condition}, ${weather.temp}°C
 
-ADVISORY GUIDELINES:
-1. Always tailor your advice specifically to the farmer's location (${location}) — mention region-relevant crops, soil types, local practices, and government schemes if applicable.
-2. Factor in the current season (${season}) and weather (${weather.condition}, ${weather.temp}°C) — e.g., watering needs, planting timing, pest risks.
-3. Recommend crops, varieties, and techniques that thrive in the climate and soil of ${location}.
-4. Mention specific local pests, diseases, or weather hazards common to this region and the current season.
-5. Provide practical, actionable steps a farmer in ${location} can take right now.
-6. If timing is involved, account for the current season — what to plant, harvest, or prepare now.
-7. Keep answers concise but complete. Use bullet points for step-by-step guidance.
+## Response Rules
+- Answer ONLY for **${location}** — mention region-specific crops, soil types, local pest risks, and local farming practices.
+- Factor in the **${season} season** and current weather (${weather.condition}, ${weather.temp}°C).
+- Be **concise and actionable** — avoid generic global advice.
+- Use **short paragraphs**, **bullet points**, and **bold key terms** for readability.
+- Structure with a brief intro, then bullet points or numbered steps.
+- Keep the total answer under 300 words unless the topic truly requires more detail.
+- Do NOT ask the user for their location — you already know it is **${location}**.
 
-Now answer the farmer's question with this full location and seasonal context:`;
+Answer the farmer's question now:`;
 
       const response = await ai.models.generateContent({
         model: "gemini-2.5-flash",

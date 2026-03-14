@@ -5,6 +5,7 @@ import { useWeather } from "@/hooks/use-weather";
 import { format } from "date-fns";
 import { Send, Sprout, User, Loader2, MessageSquare, MapPin, CloudSun, Leaf, CalendarDays } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import ReactMarkdown from "react-markdown";
 
 // Compute current season from month (used locally to display badge)
 function getSeasonLabel(): string {
@@ -164,11 +165,22 @@ export default function Chatbot() {
                 <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
                   <Sprout className="w-5 h-5 text-primary" />
                 </div>
-                <div className="bg-white border border-border/50 p-4 rounded-2xl rounded-tl-sm max-w-[80%] shadow-sm">
-                  <p className="leading-relaxed text-foreground whitespace-pre-wrap">{chat.answer}</p>
+                <div className="bg-white border border-border/50 p-5 rounded-2xl rounded-tl-sm max-w-[80%] shadow-sm">
+                  <div className="prose prose-sm prose-green max-w-none text-foreground
+                    prose-headings:font-semibold prose-headings:text-foreground prose-headings:mt-4 prose-headings:mb-2
+                    prose-h3:text-base prose-h4:text-sm
+                    prose-p:leading-relaxed prose-p:my-2
+                    prose-ul:my-2 prose-ul:pl-4 prose-li:my-0.5
+                    prose-ol:my-2 prose-ol:pl-4
+                    prose-strong:text-foreground prose-strong:font-semibold
+                    prose-hr:border-border prose-hr:my-3
+                    prose-code:text-primary prose-code:bg-primary/10 prose-code:px-1 prose-code:rounded
+                  ">
+                    <ReactMarkdown>{chat.answer}</ReactMarkdown>
+                  </div>
                   {/* Location context tag on each response */}
                   {user?.location && (
-                    <div className="flex items-center gap-1 mt-3 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1 mt-3 pt-3 border-t border-border/40 text-xs text-muted-foreground">
                       <MapPin className="w-3 h-3" />
                       <span>Advice for {user.location} · {season}</span>
                     </div>
