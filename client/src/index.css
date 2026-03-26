@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Yeseva+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Yeseva+One&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -19,7 +19,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 140 30% 15%;
     
-    --primary: 142 40% 35%;        /* Muted lush green */
+    --primary: 142 45% 32%;        /* Rich forest green */
     --primary-foreground: 0 0% 100%;
     
     --secondary: 40 20% 90%;       /* Tan/beige */
@@ -36,15 +36,20 @@
 
     --border: 140 20% 85%;
     --input: 140 20% 85%;
-    --ring: 142 40% 35%;
+    --ring: 142 45% 32%;
 
     --radius: 1rem;
+  }
+
+  * {
+    @apply border-border;
+    scroll-behavior: smooth;
   }
 
   body {
     @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary;
     font-family: var(--font-body);
-    background-image: radial-gradient(hsl(var(--primary)/0.05) 1px, transparent 1px);
+    background-image: radial-gradient(hsl(var(--primary)/0.04) 1px, transparent 1px);
     background-size: 32px 32px;
   }
 
@@ -56,10 +61,22 @@
 
 @layer utilities {
   .glass-panel {
-    @apply bg-white/70 backdrop-blur-xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.04)];
+    @apply bg-white/70 backdrop-blur-xl border border-white/50 shadow-[0_8px_30px_rgb(0,0,0,0.05)];
   }
   
   .text-balance {
     text-wrap: balance;
+  }
+
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  /* Smooth card hover glow */
+  .glow-hover {
+    @apply transition-all duration-300;
+  }
+  .glow-hover:hover {
+    box-shadow: 0 20px 60px -10px hsl(var(--primary)/0.2);
   }
 }
